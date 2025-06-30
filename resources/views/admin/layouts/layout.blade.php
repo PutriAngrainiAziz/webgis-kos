@@ -39,7 +39,7 @@
     <div class="wrapper">
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
-                <a class="sidebar-brand" href="index.html">
+                <a class="sidebar-brand" href="{{ route('admin') }}">
                     <span class="align-middle">Admin</span>
                 </a>
 
@@ -85,11 +85,11 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item {{ request()->routeIs('admin.daftarPengguna') ? 'active' : '' }}">
+                    {{-- <li class="sidebar-item {{ request()->routeIs('admin.daftarPengguna') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('admin.daftarPengguna') }}">
                             <i class="align-middle" data-feather="users"></i> <span class="align-middle">Daftar Pengguna</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     {{-- <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('peta.marker') }}">

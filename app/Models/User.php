@@ -20,7 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',                 // ← WAJIB kalau kamu set role secara manual
+        'role',             
         'nik',
         'alamat',
         'foto_ktp',
