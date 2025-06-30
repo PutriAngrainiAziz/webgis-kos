@@ -21,7 +21,7 @@ class AuthController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users',
         'password' => 'required|confirmed|min:6',
-        'nik' => 'required|string|max:20',
+        'nik' => 'required|digits:16',
         'alamat' => 'required|string',
         'foto_ktp' => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ], [
@@ -32,6 +32,7 @@ class AuthController extends Controller
         'password.confirmed' => 'Konfirmasi password tidak cocok.',
         'password.min' => 'Password minimal 6 karakter.',
         'nik.required' => 'NIK wajib diisi.',
+        'nik.digits' => 'NIK harus 16 digit angka.',
         'alamat.required' => 'Alamat wajib diisi.',
         'foto_ktp.required' => 'Foto KTP wajib diunggah.',
         'foto_ktp.image' => 'File harus berupa gambar.',
