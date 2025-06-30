@@ -49,8 +49,13 @@
 
                         <div class="col-md-6">
                             <label for="nomor_kontak" class="form-label">Nomor Kontak</label>
-                            <input type="text" class="form-control" id="nomor_kontak" name="nomor_kontak" required>
+                            <input type="tel" class="form-control" id="nomor_kontak" name="nomor_kontak"
+                                pattern="[0-9]{10,13}"
+                                title="Masukkan nomor 10 sampai 13 digit angka tanpa spasi atau tanda lain"
+                                required
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                         </div>
+
 
                         <div class="col-md-6">
                             <label for="status" class="form-label">Status Kos</label>
