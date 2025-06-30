@@ -10,14 +10,6 @@
         <i class="bi bi-shield-exclamation" style="font-size: 1.5rem;"></i>
         Verifikasi Pemilik Kos
     </h2>
-
-
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle">
             <thead class="table-dark text-center">
@@ -49,21 +41,24 @@
                             <span class="badge bg-warning text-dark">{{ ucfirst($pemilik->status_verifikasi) }}</span>
                         </td>
                         <td class="text-center">
-                            <form method="POST" action="{{ route('admin.verifikasi.pemilik.setujui', $pemilik->id) }}" style="display:inline-block;">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn btn-sm btn-success" title="Setujui">
-                                    <i class="bi bi-check-circle"></i> Setujui
-                                </button>
-                            </form>
-                            <form method="POST" action="{{ route('admin.verifikasi.pemilik.tolak', $pemilik->id) }}" style="display:inline-block;">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin tolak akun ini?')" title="Tolak">
-                                    <i class="bi bi-x-circle"></i> Tolak
-                                </button>
-                            </form>
+                            <div class="d-flex justify-content-center gap-2">
+                                <form method="POST" action="{{ route('admin.verifikasi.pemilik.setujui', $pemilik->id) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-sm btn-success" title="Setujui">
+                                        <i class="bi bi-check-circle"></i> Setujui
+                                    </button>
+                                </form>
+                                <form id="form-tolak-{{ $pemilik->id }}" action="{{ route('admin.verifikasi.pemilik.tolak', $pemilik->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="button" class="btn btn-sm btn-danger btn-tolak" data-id="{{ $pemilik->id }}">
+                                        <i class="bi bi-x-circle"></i> Tolak
+                                    </button>
+                                </form>
+                            </div>
                         </td>
+
                     </tr>
                 @empty
                     <tr>
@@ -75,3 +70,34 @@
     </div>
 </div>
 @endsection
+
+@push('javascript')
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-tolak').forEach(function(button) {
+        button.addEventListener('click', function () {
+            const id = this.dataset.id;
+
+            Swal.fire({
+                title: 'Tolak Akun?',
+                text: 'Yakin ingin menolak pemilik kos ini? Aksi ini tidak dapat dibatalkan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e3342f',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Tolak',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-tolak-' + id).submit();
+                }
+            });
+        });
+    });
+});
+</script>
+
+
+@endpush
+

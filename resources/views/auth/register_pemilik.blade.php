@@ -1,79 +1,81 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Daftar Sebagai Pemilik</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f7f7f7;
-            padding: 20px;
-        }
-        .form-container {
-            background-color: #fff;
-            max-width: 500px;
-            margin: auto;
-            padding: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        input, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 16px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .error {
-            color: red;
-            margin-bottom: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Daftar Sebagai Pemilik</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="{{ asset('home_asset/css/register_pemilik.css') }}" rel="stylesheet">
+
 </head>
 <body>
 
-<div class="form-container">
-    <h2>Daftar sebagai Pemilik Kos</h2>
+  <div class="form-container">
+    <h2 class="section-title">Daftar sebagai Pemilik Kos</h2>
 
-    @if ($errors->any())
-        <div class="error">
-            <ul style="padding-left: 20px;">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('register.pemilik') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('register.pemilik') }}" method="POST" enctype="multipart/form-data" autocomplete="on">
         @csrf
-        <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
-        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
 
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="password" name="password_confirmation" placeholder="Konfirmasi Password" required>
+        <div class="form-group">
+            {{-- <label for="name">Nama Lengkap</label> --}}
+            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Nama Lengkap" required autocomplete="name">
+            @error('name')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-        <input type="text" name="nik" placeholder="NIK" value="{{ old('nik') }}" required>
-        <input type="text" name="alamat" placeholder="Alamat Lengkap" value="{{ old('alamat') }}" required>
+        <div class="form-group">
+            {{-- <label for="email">Email</label> --}}
+            <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email">
+            @error('email')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-        <label for="foto_ktp">Upload Foto KTP:</label>
-        <input type="file" name="foto_ktp" accept="image/*" required>
+        <div class="form-group">
+            {{-- <label for="password">Password</label> --}}
+            <input type="password" name="password" id="password" placeholder="Password" required autocomplete="new-password">
+            @error('password')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            {{-- <label for="password_confirmation">Konfirmasi Password</label> --}}
+            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
+            @error('password_confirmation')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            {{-- <label for="nik">NIK</label> --}}
+            <input type="text" name="nik" id="nik" value="{{ old('nik') }}" placeholder="Nomor Induk Kependudukan (NIK)" required autocomplete="off">
+            @error('nik')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            {{-- <label for="alamat">Alamat Lengkap</label> --}}
+            <input type="text" name="alamat" id="alamat" value="{{ old('alamat') }}" placeholder="Alamat Lengkap" required autocomplete="street-address">
+            @error('alamat')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group file">
+            <label for="foto_ktp">Upload Foto KTP</label>
+            <input type="file" name="foto_ktp" id="foto_ktp" accept="image/*" required>
+            @error('foto_ktp')
+            <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
         <button type="submit">Daftar</button>
-    </form>
-</div>
+        </form>
+
+  </div>
 
 </body>
 </html>

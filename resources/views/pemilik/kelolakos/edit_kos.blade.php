@@ -1,4 +1,7 @@
 @extends('pemilik.layouts.layout')
+@section('pemilik_page_title')
+    Pemilik Edit Kos
+@endsection
 
 @section('edit_kos')
 <div class="container py-5">
@@ -76,7 +79,7 @@
                             @if ($kos->foto)
                                 <div class="mt-2">
                                     <p class="mb-1">Foto Sekarang:</p>
-                                    <img src="{{ asset('storage/' . $kos->foto) }}" alt="Foto Kos" class="img-fluid rounded" width="200">
+                                    <img src="{{ asset('storage/foto_kos/' . $kos->foto) }}" alt="Foto Kos" class="img-fluid rounded" width="200">
                                 </div>
                             @endif
                         </div>
@@ -107,7 +110,6 @@
 
     let marker;
 
-    // Pas load halaman, pasang marker di lokasi awal
     if("{{ old('latitude', $kos->latitude) }}" && "{{ old('longitude', $kos->longitude) }}"){
         marker = L.marker([{{ old('latitude', $kos->latitude) }}, {{ old('longitude', $kos->longitude) }}]).addTo(map);
     }

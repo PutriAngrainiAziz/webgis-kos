@@ -1,5 +1,6 @@
 /* === Tampilan Table Kos === */
-.table th, .table td {
+.table th,
+.table td {
     vertical-align: middle;
     text-align: center;
 }
@@ -7,7 +8,6 @@
 .table img {
     border-radius: 8px;
 }
-
 
 /* === Card Ringkasan === */
 .card.bg-light {
@@ -19,7 +19,8 @@
 }
 
 /* === Tombol dan Input === */
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
     border-radius: 10px;
 }
 
@@ -31,14 +32,13 @@
     border-radius: 0 20px 20px 0;
 }
 
-
 /* Table clean look */
-.table th, .table td {
+.table th,
+.table td {
     vertical-align: middle;
     text-align: center;
     font-size: 14px;
 }
-
 
 /* Button */
 .btn-sm {
@@ -57,5 +57,68 @@
     .d-flex.flex-wrap {
         flex-direction: column;
         gap: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .table th,
+    .table td {
+        font-size: 0.85rem;
+    }
+
+    .table img {
+        width: 50px !important;
+    }
+
+    .btn-icon {
+        background: none;
+        border: none;
+        font-size: 1rem;
+        color: #0d6efd;
+    }
+
+    .btn-icon:hover {
+        color: #0a58ca;
+    }
+
+    @media (min-width: 768px) {
+        .btn-icon {
+            display: none;
+        }
+
+        #mobileSearchForm {
+            display: none !important;
+        }
+    }
+
+    /* Hilangkan garis kasar antara input & tombol */
+    .input-group .form-control,
+    .input-group .btn {
+        border-radius: 0 !important;
+    }
+
+    .input-group-sm .form-control {
+        padding: 0.45rem 0.75rem;
+    }
+
+    .btn-outline-primary i {
+        font-size: 1rem;
+    }
+
+    /* Responsive fallback */
+    @media (max-width: 576px) {
+        .input-group {
+            flex-direction: column;
+        }
+
+        .input-group .form-control,
+        .input-group .btn {
+            width: 100%;
+        }
+    }
+    /* Optional: Responsifkan alert pop-up SweetAlert */
+    .swal-responsive-popup {
+        max-width: 80vw !important;
+        font-size: 0.95rem;
     }
 }

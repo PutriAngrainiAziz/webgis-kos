@@ -18,7 +18,7 @@ class PemilikMainController extends Controller
         $kosAktif = $kosList->where('status', 'aktif')->count();
         $kosNonaktif = $kosList->where('status', 'nonaktif')->count();
         $kosTerverifikasi = $kosList->where('status_verifikasi', 'disetujui')->count();
-        $kosBelumTerverifikasi = $kosList->where('status_verifikasi', 'ditolak')->count();
+        $kosBelumTerverifikasi = $kosList->where('status_verifikasi', 'menunggu')->count();
 
         return view('pemilik.dashboard', compact('kosList', 'totalKos', 'kosAktif', 'kosNonaktif', 'kosTerverifikasi', 'kosBelumTerverifikasi'));
     }

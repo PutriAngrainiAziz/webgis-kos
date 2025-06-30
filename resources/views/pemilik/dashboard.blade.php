@@ -4,107 +4,55 @@
     Dashboard Pemilik Kos
 @endsection
 
-@section('css')
-<style>
-    #map {
-        height: 500px;
-        width: 100%;
-    }
-</style>
-@endsection
+
 
 @section('pemilik_layout')
-<div class="row mb-5 text-center">
-    <div class="col">
-        <div class="card bg-primary text-white shadow rounded-3 py-1">
-            <div class="card-body">
-                <i class="bi bi-building fs-2 mb-2"></i>
-                <h6>Total Kos</h6>
-                <h3>{{ $totalKos }}</h3>
+<div class="container-fluid">
+    <div class="container py-3">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-3">
+            <div class="col">
+                <div class="p-2 bg-primary text-white rounded shadow-sm">
+                    <i class="bi bi-building fs-3"></i>
+                    <div class="fw-semibold">Total Kos</div>
+                    <div class="fs-5">{{ $totalKos }}</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-2 bg-success text-white rounded shadow-sm">
+                    <i class="bi bi-check-circle-fill fs-3"></i>
+                    <div class="fw-semibold">Kos Aktif</div>
+                    <div class="fs-5">{{ $kosAktif }}</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-2 bg-secondary text-white rounded shadow-sm">
+                    <i class="bi bi-slash-circle-fill fs-3"></i>
+                    <div class="fw-semibold">Kos Nonaktif</div>
+                    <div class="fs-5">{{ $kosNonaktif }}</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-2 bg-info text-white rounded shadow-sm">
+                    <i class="bi bi-patch-check-fill fs-3"></i>
+                    <div class="fw-semibold">Terverifikasi</div>
+                    <div class="fs-5">{{ $kosTerverifikasi }}</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-2 bg-warning text-white rounded shadow-sm">
+                    <i class="bi bi-hourglass-split fs-3"></i>
+                    <div class="fw-semibold">Non Terverifikasi</div>
+                    <div class="fs-5">{{ $kosBelumTerverifikasi }}</div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col">
-        <div class="card bg-success text-white shadow rounded-3 py-1">
-            <div class="card-body">
-                <i class="bi bi-check-circle-fill fs-2 mb-2"></i>
-                <h6>Kos Aktif</h6>
-                <h3>{{ $kosAktif }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card bg-secondary text-white shadow rounded-3 py-1">
-            <div class="card-body">
-                <i class="bi bi-slash-circle-fill fs-2 mb-2"></i>
-                <h6>Kos Nonaktif</h6>
-                <h3>{{ $kosNonaktif }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card bg-info text-white shadow rounded-3 py-1">
-            <div class="card-body">
-                <i class="bi bi-patch-check-fill fs-2 mb-2"></i>
-                <h6>Terverifikasi</h6>
-                <h3>{{ $kosTerverifikasi }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card bg-warning text-white shadow rounded-3 py-1">
-            <div class="card-body">
-                <i class="bi bi-hourglass-split fs-2 mb-2"></i>
-                <h6>Belum di Verifikasi</h6>
-                <h3>{{ $kosBelumTerverifikasi }}</h3>
-            </div>
-        </div>
-    </div>
+
+    <div id="map"></div>
 </div>
-
-
-<div id="map"></div>
 @endsection
 
 @push('javascript')
-{{-- <script>
-    const map = L.map('map').setView([-4.0, 122.5], 13); // Koordinat awal Kendari misalnya
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
-
-    const iconAktif = L.icon({
-        iconUrl: '/iconMarkers/aktif.svg',
-        iconSize: [120, 120]
-    });
-
-    const iconNonaktif = L.icon({
-        iconUrl: '/iconMarkers/nonaktif.svg',
-        iconSize: [120, 120]
-    });
-
-    const kosData = @json($kosList);
-
-    kosData.forEach(kos => {
-        if (kos.latitude && kos.longitude) {
-            const markerIcon = kos.status === 'aktif' ? iconAktif : iconNonaktif;
-            L.marker([kos.latitude, kos.longitude], { icon: markerIcon })
-                .addTo(map)
-                .bindPopup(`
-    <strong>${kos.nama_kos}</strong><br>
-    Alamat: ${kos.alamat}<br>
-    Harga Sewa: Rp${kos.harga_sewa}<br>
-    Tipe Kamar: ${kos.tipe_kamar}<br>
-    Fasilitas: ${kos.fasilitas || '-'}<br>
-    Kontak: ${kos.nomor_kontak}<br>
-    Foto: <br><img src="/storage/foto_kos/${kos.foto}" alt="Foto Kos" width="150"><br>
-`);
-
-        }
-    });
-</script> --}}
-
 <script>
     var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -128,7 +76,7 @@
 
     const keckambu = L.layerGroup();
     const masjid = L.layerGroup();
-    // const pendidikan = L.layerGroup();
+    const universitas = L.layerGroup();
 
 
     var map = L.map('map', {
@@ -142,36 +90,36 @@
     var kosCluster = L.markerClusterGroup();
 
     kosList.forEach(kos => {
-        // Tentukan icon berdasarkan tipe_kamar
         let iconUrl;
         if (kos.status.toLowerCase() === 'aktif') {
             iconUrl = '/iconMarkers/aktif.svg';
         } else {
-            iconUrl = '/iconMarkers/nonaktif.svg'; // default atau tipe 'Campur'
+            iconUrl = '/iconMarkers/nonaktif.svg';
         }
 
         // Buat custom icon
         var customIcon = L.icon({
             iconUrl: iconUrl,
-            iconSize: [120, 120], // bisa kamu sesuaikan
-            iconAnchor: [16, 32], // titik bawah icon
-            popupAnchor: [0, -32] // posisi popup relatif terhadap icon
+            iconSize: [120, 120],
+            iconAnchor: [60, 120],
+            popupAnchor: [0, -80]
         });
 
         // Tambahkan marker dengan icon yang sesuai
         let marker = L.marker([kos.latitude, kos.longitude], { icon: customIcon })
             .bindPopup(`
-                <div style="max-width:250px">
-                    <img src="/storage/foto_kos/${kos.foto}" style="width:100%; height:auto; border-radius:8px; margin-bottom:5px;">
-                    <strong>${kos.nama_kos.charAt(0).toUpperCase() + kos.nama_kos.slice(1)}</strong><br>
-                    Alamat : ${kos.alamat}<br>
-                    Harga Sewa : Rp ${parseInt(kos.harga_sewa).toLocaleString()}<br>
-                    Tipe Kamar : ${kos.tipe_kamar}<br>
-                    Fasilitas : ${kos.fasilitas}<br>
-                    Kontak : ${kos.nomor_kontak}<br>
-                    Status Verifikasi : ${kos.status_verifikasi}
+                <div style="max-width:200px; max-height:240px; overflow-y:auto; font-size: 13px; line-height:1.4;">
+                    <img src="/storage/foto_kos/${kos.foto}"style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 6px;">
+                    <div><strong>${kos.nama_kos}</strong></div>
+                    <div><strong>Alamat:</strong> ${kos.alamat}</div>
+                    <div><strong>Harga Sewa:</strong> Rp ${parseInt(kos.harga_sewa).toLocaleString()}</div>
+                    <div><strong>Tipe Kamar:</strong> ${kos.tipe_kamar}</div>
+                    <div><strong>Fasilitas:</strong> ${kos.fasilitas}</div>
+                    <div><strong>Kontak:</strong> ${kos.nomor_kontak}</div>
+                    <div><strong>Status Verifikasi:</strong> ${kos.status_verifikasi}</div>
                 </div>
-            `);
+            `)
+
         kosCluster.addLayer(marker);
     });
 
@@ -210,6 +158,27 @@
         });
 
 
+    //Universitas
+    var iconUniv = L.icon({
+    iconUrl: "{{ asset('iconMarkers/universitas_3.png') }}"
+    });
+
+    fetch('/geojson/universitas.geojson')
+        .then(res => res.json())
+        .then(data => {
+            L.geoJSON(data, {
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng, { icon: iconUniv });
+                },
+                onEachFeature: function (feature, layer) {
+                    if (feature.properties && feature.properties["Nama Unive"]) {
+                        layer.bindPopup(`<b>${feature.properties["Nama Unive"]}`);
+                    }
+                }
+            }).addTo(universitas);
+        });
+
+
     const baseLayers = {
         'Open Street Map': osm,
         'Stadia Alidade': Stadia_AlidadeSatellite,
@@ -220,7 +189,7 @@
     const overlayers = {
         'keckambu': keckambu,
         'masjid': masjid,
-        // 'pendidikan': pendidikan,
+        'universitas': universitas,
         'Kos': kosCluster
     }
 
@@ -231,8 +200,8 @@
     var iconUserLocation = L.icon({
         iconUrl: "{{ asset('iconMarkers/lokasisaatini.svg') }}",
         iconSize: [120, 120],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+        iconAnchor: [60, 120],
+        popupAnchor: [0, -80]
     });
 
     // Kontrol kustom
@@ -242,7 +211,6 @@
             btn.title = 'Tampilkan Lokasi Anda';
             btn.innerHTML = `<img src="{{ asset('iconMarkers/my-location-svgrepo-com.svg') }}" style="width: 24px;">`;
 
-            // Tambahkan class CSS agar bisa diatur tampilannya
             btn.className = 'leaflet-bar leaflet-control leaflet-control-custom';
 
             // Handle klik
@@ -284,4 +252,5 @@
 </script>
 
 @endpush
+
 

@@ -1,8 +1,12 @@
 @extends('pemilik.layouts.layout')
 
+@section('pemilik_page_title')
+    Pemilik Tambah Kos
+@endsection
+
 @section('tambah_kos')
 
-<div class="container-fluid px-2 py-2">
+<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="form-container">
@@ -63,12 +67,12 @@
 
                         <div class="col-12">
                             <label class="form-label">Pilih Lokasi Kos di Peta</label>
-                            <div id="map" style="height: 300px;"></div>
+                            <div id="map" style="height: 250px; max-height: 50vh;" class="rounded shadow-sm mt-2"></div>
                             <input type="hidden" id="latitude" name="latitude" required>
                             <input type="hidden" id="longitude" name="longitude" required>
                         </div>
 
-                        <button type="submit" class="btn btn-save">
+                        <button type="submit" class="btn btn-save w-100">
                             <i class="bi bi-save-fill me-1"></i> Simpan Data Kos
                         </button>
 
@@ -85,7 +89,6 @@
         {{ session('success') }}
     </div>
 @endif
-
 @push('javascript')
 
 

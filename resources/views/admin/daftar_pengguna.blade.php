@@ -10,12 +10,6 @@
             <i class="bi bi-people-fill" style="font-size: 1.5rem;"></i>
             Daftar Akun Pengguna
         </h2>
-
-
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
         <div class="table-responsive">
             <table class="table table-bordered table-hover text-center align-middle">
                 <thead class="table-dark">
@@ -33,10 +27,12 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <form action="{{ route('admin.pengguna.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                <form id="form-hapus-{{ $user->id }}" action="{{ route('admin.pengguna.destroy', $user->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="confirmHapus('{{ $user->id }}')">
+                                        Hapus
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -46,3 +42,24 @@
         </div>
     </div>
 @endsection
+
+@push('javascript')
+<script>
+  function confirmHapus(id) {
+    Swal.fire({
+      title: 'Hapus Pengguna?',
+      text: "Data yang dihapus tidak bisa dikembalikan.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Ya, Hapus',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById('form-hapus-' + id).submit();
+      }
+    });
+  }
+</script>
+@endpush

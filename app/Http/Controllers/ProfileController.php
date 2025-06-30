@@ -8,33 +8,69 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = Auth::user();
+
+        // Mapping angka ke nama role
+        $roleMap = [
+            0 => 'admin',
+            1 => 'pemilik',
+            2 => 'pengguna',
+        ];
+
+        $roleName = $roleMap[$user->role] ?? 'unknown';
+
+        switch ($roleName) {
+            case 'admin':
+                return view('admin.profile.edit', compact('user', 'roleName'));
+            case 'pemilik':
+                return view('pemilik.profile.edit', compact('user', 'roleName'));
+            case 'pengguna':
+                return view('pengguna.profile.edit', compact('user', 'roleName'));
+            default:
+                abort(403);
+        }
     }
+
 
     /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->fill($request->validated());
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        // Kalau kamu tambahkan password di validasi:
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $user->save();
+
+        // Arahkan ke route edit sesuai role
+        $redirectRoute = match ((int)$user->role) {
+            0 => 'profile.edit.admin',
+            1 => 'profile.edit.pemilik',
+            2 => 'profile.edit.user',
+            default => 'home', // fallback kalau role tidak dikenal
+        };
+
+        return Redirect::route($redirectRoute)->with('success', 'Profil berhasil diperbarui');
+
     }
 
     /**

@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Detail Kos - {{ $kos->nama_kos }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('home_asset/css/detailkos.css') }}">
-</head>
-<body>
+@extends('layouts.layout')
 
+@section('home_page_title')
+Detail Kos - {{ $kos->nama_kos }}
+@endsection
+
+@section('detail_kos')
 <div class="container">
-    {{-- <a href="{{ url()->previous() }}" class="btn-back">←</a> --}}
+
+</div>
+<div class="kos-detail-container">
     <div class="image-section">
         <img src="{{ asset('storage/foto_kos/' . $kos->foto) }}" alt="Foto Kos {{ $kos->nama_kos }}">
     </div>
@@ -26,40 +24,181 @@
     </div>
 </div>
 
-<div id="map" style="height: 350px; margin: 40px; border-radius: 12px;"></div>
+<div id="map"></div>
+<div id="route-info" style="margin: 10px; font-weight: bold; background: #f3f3f3; padding: 10px; border-radius: 8px;"></div>
 
-</body>
-</html>
-
-<!-- Leaflet CSS & JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        var map = L.map('map').setView([{{ $kos->latitude }}, {{ $kos->longitude }}], 16);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // BASE LAYERS
+        var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        });
 
+        var Stadia_AlidadeSatellite = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg', {
+            minZoom: 0,
+            maxZoom: 20,
+            attribution: '&copy; CNES, Airbus DS | <a href="https://www.stadiamaps.com/">Stadia Maps</a>'
+        });
+
+        var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri'
+        });
+
+        var MtbMap = L.tileLayer('http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors &amp; USGS'
+        });
+
+        // OVERLAY GROUP
+        const kos = L.layerGroup();
+        const keckambu = L.layerGroup();
+        const masjid = L.layerGroup();
+        const universitas = L.layerGroup();
+
+        // INISIALIASI MAP
+        var map = L.map('map', {
+            center: [{{ $kos->latitude }}, {{ $kos->longitude }}],
+            zoom: 15,
+            layers: [osm, kos]
+        });
+
+        // MARKER KOS
         L.marker([{{ $kos->latitude }}, {{ $kos->longitude }}])
-            .addTo(map)
+            .addTo(kos)
             .bindPopup("<b>{{ $kos->nama_kos }}</b>")
             .openPopup();
 
-        // Icon Lokasi User
-        var iconUserLocation = L.icon({
-            iconUrl: "{{ asset('iconMarkers/lokasisaatini.svg') }}",
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-            popupAnchor: [0, -40]
+        // KECAMATAN KAMBU
+        fetch('/geojson/keckambu.geojson')
+            .then(res => res.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    style: {
+                        color: 'red',
+                        weight: 2
+                    }
+                }).addTo(keckambu);
+            });
+
+        // MASJID
+        var iconMasjid = L.icon({
+            iconUrl: "{{ asset('iconMarkers/tempatIbadah_4.png') }}",
         });
 
-        // Custom Button Control
+        fetch('/geojson/tmptibadah.geojson')
+            .then(res => res.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, { icon: iconMasjid });
+                    },
+                    onEachFeature: function (feature, layer) {
+                        if (feature.properties && feature.properties["Nama Masji"]) {
+                            layer.bindPopup(`<b>${feature.properties["Nama Masji"]}</b>`);
+                        }
+                    }
+                }).addTo(masjid);
+            });
+
+        // UNIVERSITAS
+        var iconUniv = L.icon({
+            iconUrl: "{{ asset('iconMarkers/universitas_3.png') }}",
+        });
+
+        fetch('/geojson/universitas.geojson')
+            .then(res => res.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, { icon: iconUniv });
+                    },
+                    onEachFeature: function (feature, layer) {
+                        if (feature.properties && feature.properties["Nama Unive"]) {
+                            layer.bindPopup(`<b>${feature.properties["Nama Unive"]}</b>`);
+                        }
+                    }
+                }).addTo(universitas);
+            });
+
+        // LAYER CONTROL
+        const baseLayers = {
+            'Open Street Map': osm,
+            'Stadia Satellite': Stadia_AlidadeSatellite,
+            'Esri World': Esri_WorldStreetMap,
+            'MTB Map': MtbMap
+        };
+
+        const overlays = {
+            'Kos': kos,
+            'Masjid': masjid,
+            'Universitas': universitas,
+            'Wilayah Kambu': keckambu
+        };
+
+        L.control.layers(baseLayers, overlays).addTo(map);
+
+
+        //Rute
+        let userToKosRoute;
+        function showRouteToKos(userLat, userLng) {
+            if (userToKosRoute) {
+                map.removeControl(userToKosRoute);
+            }
+
+            L.marker([userLat, userLng], { icon: iconUserLocation })
+                .addTo(map)
+                .bindPopup("<b>Lokasi Sekarang</b>")
+                .openPopup();
+
+            // Routing control
+            userToKosRoute = L.Routing.control({
+                waypoints: [
+                    L.latLng(userLat, userLng),
+                    L.latLng({{ $kos->latitude }}, {{ $kos->longitude }})
+                ],
+                routeWhileDragging: false,
+                show: false,
+                addWaypoints: false,
+                createMarker: function () { return null; }
+            }).addTo(map);
+
+            // Tampilkan jarak & waktu tempuh
+            userToKosRoute.on('routesfound', function (e) {
+                const route = e.routes[0];
+                const distance = (route.summary.totalDistance / 1000).toFixed(2);
+                const time = Math.ceil(route.summary.totalTime / 60); 
+
+                document.getElementById('route-info').innerHTML = `
+                    <div style="
+                        background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+                        padding: 15px;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        font-family: 'Segoe UI', sans-serif;
+                        font-size: 16px;
+                        color: #333;
+                        line-height: 1.6;
+                    ">
+                        <div><i class="bi bi-geo-alt-fill" style="color: #0d6efd;"></i> <strong>Jarak Tempuh:</strong> ${distance} km</div>
+                        <div><i class="bi bi-clock-fill" style="color: #198754;"></i> <strong>Perkiraan Waktu Tempuh:</strong> ${time} menit</div>
+                    </div>
+                `;
+
+            });
+        }
+
+        // USER LOCATION BUTTON
+        var iconUserLocation = L.icon({
+            iconUrl: "{{ asset('iconMarkers/lokasisaatini.svg') }}",
+            iconSize: [50, 50],
+            iconAnchor: [20, 41],
+            popupAnchor: [0, -35]
+        });
+
         L.Control.MyLocation = L.Control.extend({
-            onAdd: function (map) {
+            onAdd: function () {
                 let btn = L.DomUtil.create('button');
                 btn.title = 'Tampilkan Lokasi Anda';
                 btn.innerHTML = `<img src="{{ asset('iconMarkers/my-location-svgrepo-com.svg') }}" style="width: 24px;">`;
@@ -69,28 +208,22 @@
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                             function (position) {
-                                var lat = position.coords.latitude;
-                                var lng = position.coords.longitude;
+                                const { latitude, longitude } = position.coords;
 
-                                L.marker([lat, lng], { icon: iconUserLocation })
-                                    .addTo(map)
-                                    .bindPopup("Lokasi Anda Sekarang")
-                                    .openPopup();
-
-                                map.setView([lat, lng], 15);
+                                map.setView([latitude, longitude], 15);
+                                showRouteToKos(latitude, longitude);
                             },
                             function () {
                                 alert("Gagal mendapatkan lokasi Anda.");
                             }
                         );
                     } else {
-                        alert("Browser Anda tidak mendukung Geolocation.");
+                        alert("Browser tidak mendukung Geolocation.");
                     }
                 });
 
                 return btn;
-            },
-            onRemove: function (map) {}
+            }
         });
 
         L.control.myLocation = function (opts) {
@@ -100,3 +233,6 @@
         L.control.myLocation({ position: 'topleft' }).addTo(map);
     });
 </script>
+
+
+@endsection

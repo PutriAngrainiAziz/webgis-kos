@@ -18,13 +18,27 @@ class AuthController extends Controller
     public function registerPemilik(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:6',
-            'nik' => 'required|string|max:20',
-            'alamat' => 'required|string',
-            'foto_ktp' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|confirmed|min:6',
+        'nik' => 'required|string|max:20',
+        'alamat' => 'required|string',
+        'foto_ktp' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ], [
+        'name.required' => 'Nama wajib diisi.',
+        'email.required' => 'Email wajib diisi.',
+        'email.unique' => 'Email sudah digunakan.',
+        'password.required' => 'Password wajib diisi.',
+        'password.confirmed' => 'Konfirmasi password tidak cocok.',
+        'password.min' => 'Password minimal 6 karakter.',
+        'nik.required' => 'NIK wajib diisi.',
+        'alamat.required' => 'Alamat wajib diisi.',
+        'foto_ktp.required' => 'Foto KTP wajib diunggah.',
+        'foto_ktp.image' => 'File harus berupa gambar.',
+        'foto_ktp.mimes' => 'Format gambar harus jpg/jpeg/png.',
+        'foto_ktp.max' => 'Ukuran gambar maksimal 2MB.',
+    ]);
+
 
         // Simpan foto KTP
         $fotoKTP = $request->file('foto_ktp')->store('ktp', 'public');

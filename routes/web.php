@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\Admin\AdminMainController;
 use App\Http\Controllers\Admin\PetaController;
-use App\Http\Controllers\Admin\KategoriKosController;
-use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Pemilik\PemilikMainController;
 use App\Http\Controllers\Pemilik\KosController;
 use App\Http\Controllers\Pengguna\PenggunaMainController;
@@ -17,16 +15,18 @@ Route::get('/register-pemilik', [AuthController::class, 'showRegisterPemilik'])-
 Route::post('/register-pemilik', [AuthController::class, 'registerPemilik'])->name('register.pemilik');
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', [KosController::class, 'petaKos'])->name('beranda');
 Route::get('/detailkos/{id}', [KosController::class, 'detailKos']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified', 'rolemanager:pengguna'])->name('dashboard');
+
+//pengguna routes
+Route::middleware(['auth', 'verified', 'rolemanager:pengguna'])->group(function () {
+    Route::prefix('user')->group(function () {
+        Route::get('/dashboard', [PenggunaMainController::class, 'index'])->name('dashboard');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.user');
+    });
+});
 
 //Admin routes
 Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () {
@@ -42,8 +42,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::get('/admin/pemilik/disetujui', [AdminMainController::class, 'daftarPemilikDisetujui'])->name('admin.pemilik.disetujui');
         Route::delete('/admin/pemilik/{id}', [AdminMainController::class, 'hapusPemilik'])->name('admin.pemilik.destroy');
 
-
-
         Route::get('/daftar-kos', [AdminMainController::class, 'daftarKos'])->name('admin.daftarKos');
         Route::get('/daftar-pengguna', [AdminMainController::class, 'daftarPengguna'])->name('admin.daftarPengguna');
         Route::delete('/pengguna/{id}', [AdminMainController::class, 'hapusPengguna'])->name('admin.pengguna.destroy');
@@ -53,11 +51,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::post('/verifikasi-kos/{id}/setujui', [KosController::class, 'verifikasiKosdiSetujui']);
         Route::post('/verifikasi-kos/{id}/tolak', [KosController::class, 'verifikasiKosTolak']);
 
-        // Route::get('/kos', [KosController::class, 'index'])->name('kos.index');
-        // Route::get('/kos/{id}', [KosController::class, 'show'])->name('kos.show');
-        // Route::post('/kos/{id}/approve', [KosController::class, 'approve'])->name('kos.approve');
-        // Route::post('/kos/{id}/reject', [KosController::class, 'reject'])->name('kos.reject');
-
         // Kelola Peta / Layer
         Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
         Route::get('/peta/marker', [PetaController::class, 'marker'])->name('peta.marker');
@@ -66,29 +59,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::get('/peta/layer', [PetaController::class, 'layer'])->name('peta.layer');
         Route::get('/peta/layer_group', [PetaController::class, 'layer_group'])->name('peta.layer_group');
 
-        // // Kelola Kategori Kos
-        // Route::get('/kategori-kos', [KategoriKosController::class, 'index'])->name('kategori.index');
-        // Route::get('/kategori-kos/create', [KategoriKosController::class, 'create'])->name('kategori.create');
-        // Route::post('/kategori-kos/store', [KategoriKosController::class, 'store'])->name('kategori.store');
-        // Route::get('/kategori-kos/{id}/edit', [KategoriKosController::class, 'edit'])->name('kategori.edit');
-        // Route::put('/kategori-kos/{id}', [KategoriKosController::class, 'update'])->name('kategori.update');
-        // Route::delete('/kategori-kos/{id}', [KategoriKosController::class, 'destroy'])->name('kategori.destroy');
 
-        // // Pengaturan Dasar
-        // Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-        // Route::post('/settings/update', [SettingController::class, 'update'])->name('settings.update');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.admin');
+
     });
 });
 
-
-//pemilik routes
-// Route::middleware(['auth', 'verified', 'rolemanager:pemilik'])->group(function () {
-//     Route::prefix('pemilik')->group(function () {
-//         Route::get('/dashboard', [PemilikMainController::class, 'index'])->name('pemilik');
-//         Route::get('/kelolakos/tambah_kos', [PemilikMainController::class, 'tambah_kos'])->name('kelolakos.tambah_kos');
-//         Route::post('/kos', [PemilikMainController::class, 'store'])->name('kos.store');
-//     });
-// });
 
 // Route::middleware(['auth', 'verified', 'rolemanager:pemilik'])->prefix('pemilik')->group(function () {
 Route::middleware(['auth', 'verified', 'rolemanager:pemilik', 'verifikasi.pemilik'])->prefix('pemilik')->group(function () {
@@ -104,19 +80,12 @@ Route::middleware(['auth', 'verified', 'rolemanager:pemilik', 'verifikasi.pemili
     Route::put('/kos/update/{kos}', [KosController::class, 'update'])->name('kelolakos.update');
     Route::patch('/kos/ubah_status/{kos}', [KosController::class, 'ubahStatus'])->name('kelolakos.ubah_status');
     Route::delete('/kos/hapus/{kos}', [KosController::class, 'destroy'])->name('kelolakos.destroy');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.pemilik');
 });
 
-//pengguna routes
-Route::middleware(['auth', 'verified', 'rolemanager:pengguna'])->group(function () {
-    Route::prefix('user')->group(function () {
-        Route::get('/dashboard', [PenggunaMainController::class, 'index'])->name('dashboard');
-    });
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// PATCH dan DELETE bisa disatukan
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 require __DIR__ . '/auth.php';

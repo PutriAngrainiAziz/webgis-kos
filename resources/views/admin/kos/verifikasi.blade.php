@@ -33,18 +33,20 @@
                             <td>Rp {{ number_format($kos->harga_sewa) }}</td>
                             <td>{{ $kos->user->name ?? '-' }}</td>
                             <td class="text-center">
-                                <form action="{{ url('/admin/verifikasi-kos/' . $kos->id . '/setujui') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-success btn-sm">
-                                        <i class="bi bi-check-circle"></i> Setujui
-                                    </button>
-                                </form>
-                                <form action="{{ url('/admin/verifikasi-kos/' . $kos->id . '/tolak') }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="bi bi-x-circle"></i> Tolak
-                                    </button>
-                                </form>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <form action="{{ url('/admin/verifikasi-kos/' . $kos->id . '/setujui') }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-success btn-sm" title="Setujui">
+                                            <i class="bi bi-check-circle"></i> Setujui
+                                        </button>
+                                    </form>
+                                    <form id="form-tolak-{{ $kos->id }}" action="{{ url('/admin/verifikasi-kos/' . $kos->id . '/tolak') }}" method="POST" style="display:inline">
+                                        @csrf
+                                        <button type="button" class="btn btn-danger btn-sm" title="Tolak" onclick="confirmTolak('{{ $kos->id }}')">
+                                            <i class="bi bi-x-circle"></i> Tolak
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -59,3 +61,27 @@
     </div>
 </div>
 @endsection
+
+
+@push('javascript')
+<script>
+  function confirmTolak(id) {
+    Swal.fire({
+      title: 'Yakin ingin menolak kos ini?',
+      text: "Tindakan ini tidak dapat dibatalkan!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Ya, Tolak!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById('form-tolak-' + id).submit();
+      }
+    });
+  }
+</script>
+
+@endpush
+

@@ -1,15 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Models\User;
 use App\Models\Kos;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminMainController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $totalPemilik = User::where('role', 1)->count();
         $totalPengguna = User::where('role', 2)->count();
         $totalKos = Kos::count();
@@ -18,11 +21,17 @@ class AdminMainController extends Controller
         $totalKosTerverifikasi = Kos::where('status_verifikasi', 'disetujui')->count();
         $totalKosBelumTerverifikasi = Kos::where('status_verifikasi', 'menunggu')->count();
 
-         $kosList = Kos::all();
+        $kosList = Kos::all();
 
         return view('admin.admin', compact(
-            'totalKos', 'totalKosAktif', 'totalKosNonaktif', 'totalKosTerverifikasi', 'totalKosBelumTerverifikasi',
-            'totalPemilik', 'totalPengguna', 'kosList'
+            'totalKos',
+            'totalKosAktif',
+            'totalKosNonaktif',
+            'totalKosTerverifikasi',
+            'totalKosBelumTerverifikasi',
+            'totalPemilik',
+            'totalPengguna',
+            'kosList'
         ));
     }
 
@@ -64,7 +73,7 @@ class AdminMainController extends Controller
         return redirect()->back()->with('success', 'Pemilik berhasil ditolak.');
     }
 
-        public function daftarPemilikDisetujui()
+    public function daftarPemilikDisetujui()
     {
         $pemiliks = User::where('role', 1)->where('status_verifikasi', 'disetujui')->get();
         return view('admin.daftar_pemilik_disetujui', compact('pemiliks'));
@@ -73,6 +82,13 @@ class AdminMainController extends Controller
     public function hapusPemilik($id)
     {
         $pemilik = User::where('role', 1)->where('status_verifikasi', 'disetujui')->findOrFail($id);
+
+        // Hapus file KTP dari storage jika ada
+        if ($pemilik->foto_ktp && Storage::exists('public/ktp/' . $pemilik->foto_ktp)) {
+            Storage::delete('public/ktp/' . $pemilik->foto_ktp);
+        }
+
+        // Hapus data dari database
         $pemilik->delete();
 
         return redirect()->back()->with('success', 'Pemilik berhasil dihapus.');
@@ -87,6 +103,4 @@ class AdminMainController extends Controller
 
         return redirect()->back()->with('success', 'Pengguna berhasil dihapus.');
     }
-
-
 }

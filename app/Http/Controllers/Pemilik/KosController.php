@@ -33,7 +33,7 @@ class KosController extends Controller
         $kosAktif = $kosList->where('status', 'aktif')->count();
         $kosNonaktif = $kosList->where('status', 'nonaktif')->count();
 
-        return view('pemilik.kelolakos.peta_kos', compact('kosList', 'totalKos', 'kosAktif', 'kosNonaktif'));
+        return view('pemilik.kelolakos.tampil_kos', compact('kosList', 'totalKos', 'kosAktif', 'kosNonaktif'));
     }
 
     public function daftar_kos(Request $request)
@@ -127,10 +127,8 @@ class KosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-
     public function update(Request $request, Kos $kos)
     {
-        // Validasi input
         $request->validate([
             'nama_kos' => 'required|string',
             'alamat' => 'required|string',
@@ -144,7 +142,6 @@ class KosController extends Controller
             'foto' => 'nullable|image|max:2048',
         ]);
 
-        // Siapkan data untuk update
         $data = $request->only([
             'nama_kos',
             'alamat',
@@ -157,18 +154,23 @@ class KosController extends Controller
             'longitude',
         ]);
 
-        // Jika ada foto baru, simpan dan update path foto
+        // Cek apakah user upload foto baru
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('public/foto_kos');
-            $data['foto'] = str_replace('public/', '', $path);
+            // Hapus foto lama jika ada
+            if ($kos->foto) {
+                Storage::disk('public')->delete('foto_kos/' . $kos->foto);
+            }
+
+            // Simpan foto baru
+            $path = $request->file('foto')->store('foto_kos', 'public');
+            $data['foto'] = basename($path); // hanya simpan nama file saja
         }
 
-
-        // Update data kos sekaligus
         $kos->update($data);
 
         return redirect()->route('kelolakos.tampil_kos')->with('success', 'Kos berhasil diperbarui!');
     }
+
 
 
 
@@ -180,10 +182,18 @@ class KosController extends Controller
         if ($kos->user_id !== Auth::id()) {
             abort(403, 'Anda tidak punya akses untuk menghapus kos ini.');
         }
+
+        // Hapus file foto jika ada
+        if ($kos->foto) {
+            Storage::disk('public')->delete('foto_kos/' . $kos->foto);
+        }
+
+        // Hapus data kos dari database
         $kos->delete();
 
         return redirect()->route('kelolakos.tampil_kos')->with('success', 'Kos berhasil dihapus!');
     }
+
 
 
     public function ubahStatus(Kos $kos)

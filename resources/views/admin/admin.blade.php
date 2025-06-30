@@ -57,49 +57,6 @@
 
 
 @push('javascript')
-{{-- <script>
-    var map = L.map('map').setView([-3.9817, 122.5100], 13); // Sesuaikan dengan lokasi kamu
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    const iconAktif = L.icon({
-        iconUrl: '/iconMarkers/aktif.svg',
-        iconSize: [120, 120]
-    });
-
-    const iconNonaktif = L.icon({
-        iconUrl: '/iconMarkers/nonaktif.svg',
-        iconSize: [120, 120]
-    });
-
-    const kosData = @json($kosList);
-    const markers = L.markerClusterGroup();
-
-    kosData.forEach(kos => {
-        if (kos.latitude && kos.longitude) {
-            const markerIcon = kos.status === 'aktif' ? iconAktif : iconNonaktif;
-
-            const marker = L.marker([kos.latitude, kos.longitude], { icon: markerIcon })
-                .bindPopup(`
-                    <strong>${kos.nama_kos}</strong><br>
-                    Alamat: ${kos.alamat}<br>
-                    Harga Sewa: Rp${kos.harga_sewa}<br>
-                    Tipe Kamar: ${kos.tipe_kamar}<br>
-                    Fasilitas: ${kos.fasilitas || '-'}<br>
-                    Kontak: ${kos.nomor_kontak}<br>
-                    Foto:<br><img src="/storage/foto_kos/${kos.foto}" alt="Foto Kos" width="150">
-                `);
-
-            markers.addLayer(marker);
-        }
-    });
-
-    map.addLayer(markers); // Tambahkan semua marker ke peta
-
-</script> --}}
-
 <script>
     var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -123,7 +80,7 @@
 
     const keckambu = L.layerGroup();
     const masjid = L.layerGroup();
-    // const pendidikan = L.layerGroup();
+    const universitas = L.layerGroup();
 
 
     var map = L.map('map', {
@@ -137,22 +94,21 @@
     var kosCluster = L.markerClusterGroup();
 
     kosList.forEach(kos => {
-        // Tentukan icon berdasarkan tipe_kamar
         let iconUrl;
         if (kos.status_verifikasi.toLowerCase() === 'disetujui') {
             iconUrl = '/iconMarkers/aktif.svg';
         } else if (kos.status_verifikasi.toLowerCase() === 'ditolak') {
             iconUrl = '/iconMarkers/toolak.svg';
         } else {
-            iconUrl = '/iconMarkers/menunggu.svg'; // default menunggu
+            iconUrl = '/iconMarkers/menunggu.svg';
         }
 
         // Buat custom icon
         var customIcon = L.icon({
             iconUrl: iconUrl,
-            iconSize: [120, 120], // bisa kamu sesuaikan
-            iconAnchor: [16, 32], // titik bawah icon
-            popupAnchor: [0, -32] // posisi popup relatif terhadap icon
+            iconSize: [120, 120],
+            iconAnchor: [60, 120],
+            popupAnchor: [0, -80]
         });
 
         // Tambahkan marker dengan icon yang sesuai
@@ -176,6 +132,7 @@
 
 
 
+    //Kec. kambu
     fetch('/geojson/keckambu.geojson')
         .then(res => res.json())
         .then(data => {
@@ -207,6 +164,26 @@
         });
 
 
+    //Universitas
+    var iconUniv = L.icon({
+    iconUrl: "{{ asset('iconMarkers/universitas_3.png') }}"
+    });
+
+    fetch('/geojson/universitas.geojson')
+        .then(res => res.json())
+        .then(data => {
+            L.geoJSON(data, {
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng, { icon: iconUniv });
+                },
+                onEachFeature: function (feature, layer) {
+                    if (feature.properties && feature.properties["Nama Unive"]) {
+                        layer.bindPopup(`<b>${feature.properties["Nama Unive"]}`);
+                    }
+                }
+            }).addTo(universitas);
+        });
+
     const baseLayers = {
         'Open Street Map': osm,
         'Stadia Alidade': Stadia_AlidadeSatellite,
@@ -217,7 +194,7 @@
     const overlayers = {
         'keckambu': keckambu,
         'masjid': masjid,
-        // 'pendidikan': pendidikan,
+        'universitas': universitas,
         'Kos': kosCluster
     }
 
@@ -239,7 +216,6 @@
             btn.title = 'Tampilkan Lokasi Anda';
             btn.innerHTML = `<img src="{{ asset('iconMarkers/my-location-svgrepo-com.svg') }}" style="width: 24px;">`;
 
-            // Tambahkan class CSS agar bisa diatur tampilannya
             btn.className = 'leaflet-bar leaflet-control leaflet-control-custom';
 
             // Handle klik
@@ -279,7 +255,5 @@
     L.control.myLocation({ position: 'topleft' }).addTo(map);
 
 </script>
-
-
 @endpush
 
