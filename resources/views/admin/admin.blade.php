@@ -137,8 +137,32 @@
         .then(res => res.json())
         .then(data => {
             L.geoJSON(data, {
-                style: {
-                    color: 'red'
+                style: function (feature) {
+                    let warna;
+                    switch (feature.properties.NAME_4) {
+                        case 'Kambu':
+                            warna = 'blue';
+                            break;
+                        case 'Lalolara':
+                            warna = 'darkred';
+                            break;
+                        case 'Padaleu':
+                            warna = 'green';
+                            break;
+                        case 'Mokoau':
+                            warna = 'yellow';
+                            break;
+                        default:
+                            warna = 'black';
+                    }
+                    return {
+                        color: warna,
+                        weight: 2,
+                        fillOpacity: 0
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(`<b>${feature.properties.NAME_4}</b>`);
                 }
             }).addTo(keckambu);
         });
