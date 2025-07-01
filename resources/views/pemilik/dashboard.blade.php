@@ -82,8 +82,17 @@
     var map = L.map('map', {
         center: [-4.020705809212554, 122.52818392075301],
         zoom: 13,
+        fullscreenControl: true,
         layers: [osm]
     })
+
+    map.on('enterFullscreen', function(){
+        console.log('Masuk Fullscreen');
+    });
+
+    map.on('exitFullscreen', function(){
+        console.log('Keluar dari Fullscreen');
+    });
 
 
     var kosList = @json($kosList);
