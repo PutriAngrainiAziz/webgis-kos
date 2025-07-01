@@ -168,7 +168,7 @@ Detail Kos - {{ $kos->nama_kos }}
             userToKosRoute.on('routesfound', function (e) {
                 const route = e.routes[0];
                 const distance = (route.summary.totalDistance / 1000).toFixed(2);
-                const time = Math.ceil(route.summary.totalTime / 60); 
+                const time = Math.ceil(route.summary.totalTime / 60);
 
                 document.getElementById('route-info').innerHTML = `
                     <div style="

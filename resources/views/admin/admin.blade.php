@@ -106,9 +106,9 @@
         // Buat custom icon
         var customIcon = L.icon({
             iconUrl: iconUrl,
-            iconSize: [120, 120],
-            iconAnchor: [60, 120],
-            popupAnchor: [0, -80]
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
         });
 
         // Tambahkan marker dengan icon yang sesuai
@@ -204,9 +204,9 @@
     //icon user_location
     var iconUserLocation = L.icon({
         iconUrl: "{{ asset('iconMarkers/lokasisaatini.svg') }}",
-        iconSize: [120, 120],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
     });
 
     // Kontrol kustom
