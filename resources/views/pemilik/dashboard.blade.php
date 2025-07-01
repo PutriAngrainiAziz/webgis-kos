@@ -211,9 +211,9 @@
     }
 
     const overlayers = {
-        'keckambu': keckambu,
-        'masjid': masjid,
-        'universitas': universitas,
+        'Batas Kec. Kambu': keckambu,
+        'Masjid': masjid,
+        'Universitas': universitas,
         'Kos': kosCluster
     }
 

@@ -252,9 +252,9 @@ Home Page
 
     const overlayers = {
         'Kos': kosCluster,
-        'masjid': masjid,
-        'universitas': universitas,
-        'keckambu': keckambu
+        'Masjid': masjid,
+        'Universitas': universitas,
+        'Batas Kec. Kambu': keckambu
     }
 
     const layerControl = L.control.layers(baseLayers, overlayers).addTo(map)
