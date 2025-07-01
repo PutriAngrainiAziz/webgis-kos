@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <!-- Leaflet Routing Machine -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen/Control.FullScreen.css" />
+
+
 
     <!-- Main CSS File -->
     <link href="{{ asset('home_asset/css/main.css') }}" rel="stylesheet">
@@ -125,6 +128,7 @@
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet.fullscreen/Control.FullScreen.js"></script>
 
     <!-- Main JS File -->
     <script src="{{ asset('home_asset/js/main.js') }}"></script>

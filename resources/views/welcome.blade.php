@@ -143,8 +143,18 @@ Home Page
     var map = L.map('map', {
         center: [-4.020705809212554, 122.52818392075301],
         zoom: 13,
+        fullscreenControl: true,
         layers: [osm]
     })
+
+    map.on('enterFullscreen', function(){
+        console.log('Masuk Fullscreen');
+    });
+
+    map.on('exitFullscreen', function(){
+        console.log('Keluar dari Fullscreen');
+    });
+
 
 
     var kosList = @json($kosList);
@@ -172,19 +182,42 @@ Home Page
         map.getPane('paneKos').style.zIndex = 650;
 
         // Tambahkan marker dengan icon yang sesuai
-        let marker = L.marker([kos.latitude, kos.longitude], { icon: customIcon,  pane: 'paneKos' })
+        let marker = L.marker([kos.latitude, kos.longitude], {
+            icon: customIcon,
+            pane: 'paneKos'
+        })
             .bindPopup(`
-                <div style="max-width:250px">
-                    <img src="/storage/foto_kos/${kos.foto}" style="width:100%; height:auto; border-radius:8px; margin-bottom:5px;">
-                    <strong>${kos.nama_kos.charAt(0).toUpperCase() + kos.nama_kos.slice(1)}</strong><br>
-                    Alamat : ${kos.alamat}<br>
-                    Harga Sewa : Rp ${parseInt(kos.harga_sewa).toLocaleString()}<br>
-                    Tipe Kamar : ${kos.tipe_kamar}<br>
-                    Fasilitas : ${kos.fasilitas}<br>
-                    Kontak : ${kos.nomor_kontak}
+                <div style="
+                    width: 250px;
+                    min-height: 280px;
+                    max-height: 280px;
+                    overflow: hidden;
+                    font-family: sans-serif;
+                ">
+                    <a href="/detailkos/${kos.id}" style="text-decoration: none; color: inherit;">
+                        <img src="/storage/foto_kos/${kos.foto}"
+                            style="
+                                width: 100%;
+                                height: 140px;
+                                object-fit: cover;
+                                border-radius: 8px;
+                                margin-bottom: 8px;
+                            "
+                        >
+                        <strong style="font-size: 1rem;">
+                            ${kos.nama_kos.charAt(0).toUpperCase() + kos.nama_kos.slice(1)}
+                        </strong><br>
+                        <span style="font-size: 0.85rem;">
+                            <b>Harga:</b> Rp ${parseInt(kos.harga_sewa).toLocaleString()} / bln<br>
+                            <b>Tipe:</b> ${kos.tipe_kamar}<br>
+                            <b>Fasilitas:</b> ${kos.fasilitas}<br>
+                            <b>Kontak:</b> ${kos.nomor_kontak}<br>
+                        </span>
+                    </a>
                 </div>
             `);
         kosCluster.addLayer(marker);
+
     });
 
     map.addLayer(kosCluster);
