@@ -50,26 +50,48 @@ Home Page
     </div><!-- End Section Title -->
 
     <div class="container">
-    <div class="d-flex overflow-auto gap-3 pb-3">
-        @foreach($kosList as $kos)
-            <div class="card shadow-sm" style="min-width: 270px; max-width: 270px; border-radius: 12px; overflow: hidden;">
-                <img src="{{ asset('storage/foto_kos/' . $kos->foto) }}" alt="{{ $kos->nama_kos }}" style="width: 100%; height: 180px; object-fit: cover;">
-                <div class="p-3 d-flex flex-column justify-content-between" style="height: 100%;">
-                    <div>
-                        <h5 class="mb-1">{{ Str::title($kos->nama_kos) }}</h5>
-                        <a href="#" style="color: #0d6efd; font-size: 0.9em;">{{ $kos->tipe_kamar }}</a>
-                        <p style="font-size: 0.85em;">
-                            Harga: Rp {{ number_format($kos->harga_sewa, 0, ',', '.') }} / bln
-                            <br>
-                            Kontak: {{ $kos->nomor_kontak }}
-                        </p>
+        <div class="d-flex overflow-auto gap-3 pb-3">
+            @foreach($kosList as $kos)
+                <div class="card shadow-sm d-flex flex-column"
+                    style="min-width: 270px; max-width: 270px; border-radius: 12px; overflow: hidden;">
+
+                    <!-- Gambar -->
+                    <img
+                        src="{{ asset('storage/foto_kos/' . $kos->foto) }}"
+                        alt="{{ $kos->nama_kos }}"
+                        style="
+                            width: 100%;
+                            height: 180px;
+                            object-fit: cover;
+                            object-position: center;
+                        "
+                    >
+
+                    <!-- Konten -->
+                    <div class="p-3 d-flex flex-column flex-grow-1">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">{{ Str::title($kos->nama_kos) }}</h5>
+                            <a href="#" style="color: #0d6efd; font-size: 0.9em;">
+                                {{ $kos->tipe_kamar }}
+                            </a>
+                            <p style="font-size: 0.85em;">
+                                Harga: Rp {{ number_format($kos->harga_sewa, 0, ',', '.') }} / bln
+                                <br>
+                                Kontak: {{ $kos->nomor_kontak }}
+                            </p>
+                        </div>
+
+                        <!-- Tombol -->
+                        <a href="{{ url('detailkos/'.$kos->id) }}"
+                            class="btn btn-sm btn-outline-primary mt-2">
+                            Selengkapnya
+                        </a>
                     </div>
-                    <a href="{{ url('detailkos/'.$kos->id) }}" class="btn btn-sm btn-outline-primary mt-2">Selengkapnya</a>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
-</div>
+
 </section><!-- /Features Section -->
 
 <section class="py-4 py-md-5 bg-white text-center shadow-sm">
