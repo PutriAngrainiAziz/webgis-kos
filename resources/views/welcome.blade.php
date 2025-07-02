@@ -117,21 +117,16 @@ Home Page
 
 </section><!-- /Features Section -->
 
-<section class="py-4 py-md-5 bg-white text-center shadow-sm">
-    <div class="container">
-        <div class="p-3 p-md-5 bg-light rounded-4 shadow-sm mx-auto" style="max-width: 720px;">
-            <h2 class="fw-bold text-primary mb-3 fs-4 fs-md-2">
-                Tertarik Menyewakan Kos Milik Anda?
-            </h2>
-            <p class="text-secondary mb-4 fs-6 fs-md-5">
-                Gabung sebagai pemilik dan kelola kos Anda dengan mudah melalui platform kami.
-            </p>
-            <a href="{{ url('/register-pemilik') }}" class="btn btn-primary btn-sm btn-md-lg px-4 py-2 rounded-pill shadow">
-                Daftar Sebagai Pemilik Kos
-            </a>
-        </div>
+<section class="cta-section">
+    <div class="container-cta">
+        <h2 class="cta-title">Tertarik Menyewakan Kos Milik Anda?</h2>
+        <p class="cta-subtitle">Gabung sebagai pemilik dan kelola kos Anda dengan mudah melalui platform kami.</p>
+        <a href="{{ url('/register-pemilik') }}" class="cta-button">
+            Daftar Sebagai Pemilik Kos
+        </a>
     </div>
 </section>
+
 
 @endsection
 
