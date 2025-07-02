@@ -2265,3 +2265,68 @@ section,
     border-top: 1px solid #ccc;
     margin: 10px 0;
 }
+
+
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    margin: 16px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    justify-content: center;
+    align-items: center;
+    max-width: 900px;
+}
+
+.filter-container input[type="text"],
+.filter-container select {
+    padding: 10px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    transition: 0.2s ease-in-out;
+    min-width: 180px;
+}
+
+.filter-container input[type="text"]:focus,
+.filter-container select:focus {
+    border-color: #007bff;
+    outline: none;
+    background-color: #fff;
+}
+
+.filter-container button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#applyFilter {
+    background-color: #007bff;
+    color: #fff;
+}
+
+#applyFilter:hover {
+    background-color: #0056b3;
+}
+
+.reset-btn {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.reset-btn:hover {
+    background-color: #c62828;
+}
+

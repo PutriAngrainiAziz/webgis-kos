@@ -33,6 +33,29 @@ Home Page
     </div><!-- End Section Title -->
 
     <div class="container">
+        <div class="filter-container">
+            <input type="text" id="search" placeholder="Cari nama/alamat kos..." />
+
+            <select id="tipe">
+                <option value="">Semua Tipe</option>
+                <option value="kos putra">Kos Putra</option>
+                <option value="kos putri">Kos Putri</option>
+                <option value="kos campur">Kos Campur</option>
+            </select>
+
+            <select id="harga">
+                <option value="">Semua Harga</option>
+                <option value="1">Di bawah 500rb</option>
+                <option value="2">500rb - 1jt</option>
+                <option value="3">Di atas 1jt</option>
+            </select>
+
+            <button id="applyFilter"><i class="fa fa-search"></i> Terapkan Filter</button>
+            <button id="resetFilter" class="reset-btn"><i class="fa fa-undo"></i> Reset</button>
+        </div>
+
+
+
         <div class="row gy-4" id="map" style="height: 400px;">
         </div>
     </div>
@@ -160,67 +183,106 @@ Home Page
     var kosList = @json($kosList);
     var kosCluster = L.markerClusterGroup();
 
-    kosList.forEach(kos => {
-        let iconUrl;
-        if (kos.tipe_kamar.toLowerCase() === 'kos putra') {
-            iconUrl = 'iconMarkers/koscowo.svg';
-        } else if (kos.tipe_kamar.toLowerCase() === 'kos putri') {
-            iconUrl = 'iconMarkers/koscewe.svg';
-        } else {
-            iconUrl = 'iconMarkers/koscampur.svg';
-        }
+    let kosMarkers = [];
 
-        // Buat custom icon
-        var customIcon = L.icon({
-            iconUrl: iconUrl,
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -32]
-        });
+    function tampilkanMarkerKos(filteredList) {
+        kosCluster.clearLayers();
+        kosMarkers = [];
 
-        map.createPane('paneKos');
-        map.getPane('paneKos').style.zIndex = 650;
+        filteredList.forEach(kos => {
+            let iconUrl;
+            if (kos.tipe_kamar.toLowerCase() === 'kos putra') {
+                iconUrl = 'iconMarkers/koscowo.svg';
+            } else if (kos.tipe_kamar.toLowerCase() === 'kos putri') {
+                iconUrl = 'iconMarkers/koscewe.svg';
+            } else {
+                iconUrl = 'iconMarkers/koscampur.svg';
+            }
 
-        // Tambahkan marker dengan icon yang sesuai
-        let marker = L.marker([kos.latitude, kos.longitude], {
-            icon: customIcon,
-            pane: 'paneKos'
-        })
-            .bindPopup(`
-                <div style="
-                    width: 250px;
-                    min-height: 280px;
-                    max-height: 280px;
-                    overflow: hidden;
-                    font-family: sans-serif;
-                ">
+            var customIcon = L.icon({
+                iconUrl: iconUrl,
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+
+            map.createPane('paneKos');
+            map.getPane('paneKos').style.zIndex = 650;
+
+            let marker = L.marker([kos.latitude, kos.longitude], {
+                icon: customIcon,
+                pane: 'paneKos'
+            }).bindPopup(`
+                <div style="width: 250px; min-height: 280px;">
                     <a href="/detailkos/${kos.id}" style="text-decoration: none; color: inherit;">
-                        <img src="/storage/foto_kos/${kos.foto}"
-                            style="
-                                width: 100%;
-                                height: 140px;
-                                object-fit: cover;
-                                border-radius: 8px;
-                                margin-bottom: 8px;
-                            "
-                        >
-                        <strong style="font-size: 1rem;">
-                            ${kos.nama_kos.charAt(0).toUpperCase() + kos.nama_kos.slice(1)}
-                        </strong><br>
-                        <span style="font-size: 0.85rem;">
-                            <b>Harga:</b> Rp ${parseInt(kos.harga_sewa).toLocaleString()} / bln<br>
-                            <b>Tipe:</b> ${kos.tipe_kamar}<br>
-                            <b>Fasilitas:</b> ${kos.fasilitas}<br>
-                            <b>Kontak:</b> ${kos.nomor_kontak}<br>
-                        </span>
+                        <img src="/storage/foto_kos/${kos.foto}" style="width: 100%; height: 140px; object-fit: cover; border-radius: 8px;">
+                        <strong>${kos.nama_kos}</strong><br>
+                        Harga: Rp ${parseInt(kos.harga_sewa).toLocaleString()}<br>
+                        Tipe: ${kos.tipe_kamar}<br>
+                        Fasilitas: ${kos.fasilitas}<br>
                     </a>
                 </div>
             `);
-        kosCluster.addLayer(marker);
 
-    });
+            kosCluster.addLayer(marker);
+            kosMarkers.push(marker);
+        });
 
-    map.addLayer(kosCluster);
+        map.addLayer(kosCluster);
+
+        if (filteredList.length === 1) {
+            // Zoom satu titik
+            map.flyTo([filteredList[0].latitude, filteredList[0].longitude], 16, {
+                animate: true,
+                duration: 1
+            });
+        } else if (filteredList.length > 1) {
+            // Zoom semua titik yang terpenuhi
+            let bounds = L.latLngBounds(filteredList.map(k => [k.latitude, k.longitude]));
+            map.fitBounds(bounds, {
+                padding: [50, 50]
+            });
+        } else {
+            // Tidak ada hasil
+            console.log("Tidak ditemukan kos yang cocok");
+        }
+    }
+
+    function filterKos() {
+        const keyword = document.getElementById('search').value.toLowerCase();
+        const tipe = document.getElementById('tipe').value;
+        const harga = document.getElementById('harga').value;
+
+        const hasilFilter = kosList.filter(kos => {
+            const cocokNama = kos.nama_kos.toLowerCase().includes(keyword) || (kos.alamat?.toLowerCase().includes(keyword) || '');
+            const cocokTipe = tipe === "" || kos.tipe_kamar.toLowerCase() === tipe;
+            const cocokHarga = (() => {
+                const h = kos.harga_sewa;
+                if (harga === "1") return h < 500000;
+                if (harga === "2") return h >= 500000 && h <= 1000000;
+                if (harga === "3") return h > 1000000;
+                return true;
+            })();
+            return cocokNama && cocokTipe && cocokHarga;
+        });
+
+        tampilkanMarkerKos(hasilFilter);
+    }
+
+    function resetFilter() {
+        document.getElementById('search').value = "";
+        document.getElementById('tipe').value = "";
+        document.getElementById('harga').value = "";
+        tampilkanMarkerKos(kosList);
+    }
+
+    // Event listeners
+    document.getElementById('applyFilter').addEventListener('click', filterKos);
+    document.getElementById('search').addEventListener('input', filterKos);
+    document.getElementById('resetFilter').addEventListener('click', resetFilter);
+
+    // Tampilkan awal
+    tampilkanMarkerKos(kosList);
 
     //Kec. Kambu
     fetch('/geojson/keckambu.geojson')
