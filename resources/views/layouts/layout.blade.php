@@ -32,7 +32,9 @@
 </head>
 
 <body class="index-page">
-    <header id="header" class="header fixed-top d-flex align-items-center">
+    {{-- <header id="header" class="header fixed-top d-flex align-items-center"> --}}
+    <header id="header" class="header {{ Request::is('/') ? 'home-header' : (Request::is('detailkos/*') ? 'detail-header' : 'default-header') }} fixed-top d-flex align-items-center">
+
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
             <!-- Logo tetap terlihat di semua ukuran layar -->

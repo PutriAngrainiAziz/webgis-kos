@@ -146,7 +146,6 @@ h6 {
 # Global Header
 --------------------------------------------------------------*/
 .header {
-    --background-color: rgba(0, 0, 0, 0.5);
     --default-color: #ffffff;
     --heading-color: #ffffff;
     color: var(--default-color);
@@ -155,6 +154,15 @@ h6 {
     transition: all 0.5s;
     z-index: 10000;
 }
+
+.home-header {
+    --background-color: rgba(0, 0, 0, 0);
+}
+
+.detail-header {
+    --background-color: rgba(0, 0, 0, 0.8);
+}
+
 
 .header .logo {
     line-height: 1;
@@ -497,6 +505,9 @@ h6 {
     line-height: 0;
 }
 
+.footer h5 {
+    color: white;
+}
 .footer h5:hover {
     color: var(--accent-color);
     border-color: var(--accent-color);
