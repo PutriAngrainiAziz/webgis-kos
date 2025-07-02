@@ -5,9 +5,6 @@ Detail Kos - {{ $kos->nama_kos }}
 @endsection
 
 @section('detail_kos')
-<div class="container">
-
-</div>
 <div id="kos" class="kos-detail-container">
     <div class="image-section">
         <img src="{{ asset('storage/foto_kos/' . $kos->foto) }}" alt="Foto Kos {{ $kos->nama_kos }}">
@@ -25,7 +22,7 @@ Detail Kos - {{ $kos->nama_kos }}
 </div>
 
 <div id="map"></div>
-<div id="route-info" style="margin: 10px; font-weight: bold; background: #f3f3f3; padding: 10px; border-radius: 8px;"></div>
+<div id="route-info" style="margin: 10px; font-weight: bold; background: #f3f3f3; padding: 10px; border-radius: 8px;">Tampilkan Lokasi Saya untuk Melihat Rute ke Kos!</div>
 
 
 
