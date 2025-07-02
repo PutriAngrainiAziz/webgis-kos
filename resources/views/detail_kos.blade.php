@@ -8,7 +8,7 @@ Detail Kos - {{ $kos->nama_kos }}
 <div class="container">
 
 </div>
-<div class="kos-detail-container">
+<div id="kos" class="kos-detail-container">
     <div class="image-section">
         <img src="{{ asset('storage/foto_kos/' . $kos->foto) }}" alt="Foto Kos {{ $kos->nama_kos }}">
     </div>
