@@ -303,4 +303,8 @@ h6 span{
   text-align:justify;
 }
 
+.register-btn:hover {
+    color: #ffeba7;
+}
+
 
