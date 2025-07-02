@@ -61,7 +61,16 @@ Detail Kos - {{ $kos->nama_kos }}
         var map = L.map('map', {
             center: [{{ $kos->latitude }}, {{ $kos->longitude }}],
             zoom: 15,
+            fullscreenControl: true,
             layers: [osm, kos]
+        });
+
+        map.on('enterFullscreen', function(){
+            console.log('Masuk Fullscreen');
+        });
+
+        map.on('exitFullscreen', function(){
+            console.log('Keluar dari Fullscreen');
         });
 
         // MARKER KOS

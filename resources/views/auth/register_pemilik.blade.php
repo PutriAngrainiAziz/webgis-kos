@@ -1,81 +1,77 @@
-<!DOCTYPE html>
-<html lang="id">
+<x-guest-layout>
 <head>
-  <meta charset="UTF-8">
-  <title>Daftar Sebagai Pemilik</title>
+  <title>Daftar Pemilik Kos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link href="{{ asset('home_asset/css/register_pemilik.css') }}" rel="stylesheet">
 
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900" rel="stylesheet">
+  <link href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" rel="stylesheet">
+
+  <!-- Style Khusus untuk Halaman Register -->
+    <link href="{{ asset('home_asset/css/register_pemilik.css') }}" rel="stylesheet">
 </head>
+
 <body>
+  <div class="register-section">
+    <div class="container">
+      <div class="register-card mx-auto">
+        <h4 class="mb-4 pb-2 text-center">Daftar Pemilik Kos</h4>
+        <div class="center-wrap">
+          <form method="POST" action="{{ route('register.pemilik') }}" enctype="multipart/form-data">
+            @csrf
 
-  <div class="form-container">
-    <h2 class="section-title">Daftar sebagai Pemilik Kos</h2>
+            <div class="form-group">
+              <input type="text" name="name" class="form-style" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+              <i class="input-icon uil uil-user"></i>
+            </div>
+            @error('name') <div class="error-message">{{ $message }}</div> @enderror
 
-    <form action="{{ route('register.pemilik') }}" method="POST" enctype="multipart/form-data" autocomplete="on">
-        @csrf
+            <div class="form-group">
+              <input type="email" name="email" class="form-style" placeholder="Email" value="{{ old('email') }}" required>
+              <i class="input-icon uil uil-at"></i>
+            </div>
+            @error('email') <div class="error-message">{{ $message }}</div> @enderror
 
-        <div class="form-group">
-            {{-- <label for="name">Nama Lengkap</label> --}}
-            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Nama Lengkap" required autocomplete="name">
-            @error('name')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
+            <div class="form-group">
+              <input type="password" name="password" class="form-style" placeholder="Password" required>
+              <i class="input-icon uil uil-lock-alt"></i>
+            </div>
+            @error('password') <div class="error-message">{{ $message }}</div> @enderror
+
+            <div class="form-group">
+              <input type="password" name="password_confirmation" class="form-style" placeholder="Konfirmasi Password" required>
+              <i class="input-icon uil uil-lock-alt"></i>
+            </div>
+            @error('password_confirmation') <div class="error-message">{{ $message }}</div> @enderror
+
+            <div class="form-group">
+              <input type="text" name="nik" class="form-style" placeholder="NIK" value="{{ old('nik') }}" required>
+              <i class="input-icon uil uil-card-atm"></i>
+            </div>
+            @error('nik') <div class="error-message">{{ $message }}</div> @enderror
+
+            <div class="form-group">
+              <input type="text" name="alamat" class="form-style" placeholder="Alamat Lengkap" value="{{ old('alamat') }}" required>
+              <i class="input-icon uil uil-map-marker"></i>
+            </div>
+            @error('alamat') <div class="error-message">{{ $message }}</div> @enderror
+
+            <div class="form-group">
+              <label for="foto_ktp">Upload Foto KTP</label>
+              <input type="file" name="foto_ktp" class="form-style-file" accept="image/*" required>
+            </div>
+            @error('foto_ktp') <div class="error-message">{{ $message }}</div> @enderror
+
+            <button type="submit" class="btn mt-4">Daftar</button>
+
+            <p class="mt-3 text-center">
+              <a href="{{ route('login') }}" class="link">Sudah punya akun? Masuk di sini</a>
+            </p>
+
+          </form>
         </div>
-
-        <div class="form-group">
-            {{-- <label for="email">Email</label> --}}
-            <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email">
-            @error('email')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            {{-- <label for="password">Password</label> --}}
-            <input type="password" name="password" id="password" placeholder="Password" required autocomplete="new-password">
-            @error('password')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            {{-- <label for="password_confirmation">Konfirmasi Password</label> --}}
-            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password">
-            @error('password_confirmation')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            {{-- <label for="nik">NIK</label> --}}
-            <input type="text" name="nik" id="nik" value="{{ old('nik') }}" placeholder="Nomor Induk Kependudukan (NIK)" required autocomplete="off">
-            @error('nik')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            {{-- <label for="alamat">Alamat Lengkap</label> --}}
-            <input type="text" name="alamat" id="alamat" value="{{ old('alamat') }}" placeholder="Alamat Lengkap" required autocomplete="street-address">
-            @error('alamat')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group file">
-            <label for="foto_ktp">Upload Foto KTP</label>
-            <input type="file" name="foto_ktp" id="foto_ktp" accept="image/*" required>
-            @error('foto_ktp')
-            <div class="error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <button type="submit">Daftar</button>
-        </form>
-
+      </div>
+    </div>
   </div>
-
 </body>
-</html>
+</x-guest-layout>
