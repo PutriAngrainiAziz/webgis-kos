@@ -65,7 +65,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
         Route::get('/peta/layer', [PetaController::class, 'layer'])->name('peta.layer');
         Route::get('/peta/layer_group', [PetaController::class, 'layer_group'])->name('peta.layer_group');
 
-
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.admin');
     });
 });
@@ -86,6 +86,7 @@ Route::middleware(['auth', 'verified', 'rolemanager:pemilik', 'verifikasi.pemili
     Route::patch('/kos/ubah_status/{kos}', [KosController::class, 'ubahStatus'])->name('kelolakos.ubah_status');
     Route::delete('/kos/hapus/{kos}', [KosController::class, 'destroy'])->name('kelolakos.destroy');
 
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.pemilik');
 });
 

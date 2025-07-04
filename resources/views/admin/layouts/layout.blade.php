@@ -288,7 +288,7 @@
                             </a>
 
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <img src="/pemilik_asset/icon/profile.svg" class="avatar img-fluid rounded me-1" alt="{{ Auth::user()->name }}" /> <span class="text-dark fw-bold text-capitalize">{{ Auth::user()->name }}</span>
+                                <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}" class="rounded-circle me-2" width="32" height="32" alt="{{ Auth::user()->name }}" /> <span class="text-dark fw-bold text-capitalize">{{ Auth::user()->name }}</span>
 
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">

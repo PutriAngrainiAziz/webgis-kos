@@ -19,7 +19,7 @@ class ProfileController extends Controller
     {
         return view('pengguna.profile.profile');
     }
-    
+
     public function edit()
     {
         $user = Auth::user();
@@ -71,11 +71,11 @@ class ProfileController extends Controller
             0 => 'profile.edit.admin',
             1 => 'profile.edit.pemilik',
             2 => 'profile.edit.user',
-            default => 'home', // fallback kalau role tidak dikenal
+            default => 'home',
         };
 
-        return Redirect::route($redirectRoute)->with('success', 'Profil berhasil diperbarui');
-
+        // return Redirect::route($redirectRoute)->with('success', 'Profil berhasil diperbarui');
+        return redirect()->route('profile.show')->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**

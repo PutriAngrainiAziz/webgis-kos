@@ -42,23 +42,19 @@
 
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-            <!-- Logo tetap terlihat di semua ukuran layar -->
             <a href="{{ url('/user/dashboard') }}#dashboard" class="logo d-flex align-items-center">
                 <h1 class="sitename m-0">KOS^_^</h1>
             </a>
 
-            <!-- Tombol toggle hanya terlihat di mobile -->
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 
-
-            <!-- Menu navigasi -->
             <nav id="navmenu" class="navmenu">
                 <ul class="nav-links list-unstyled mb-2">
                     <li><a href="{{ url('/user/dashboard') }}#dashboard">Home</a></li>
                     <li><a href="{{ url('/user/dashboard') }}#peta">Peta</a></li>
                     <li><a href="{{ url('/user/dashboard') }}#kos">Kos</a></li>
                     <li><a href="{{ route('favorit.index') }}#favorit">Favorit Saya</a></li>
-                    <li class="nav-item dropdown">
+                    {{-- <li class="nav-item dropdown">
                         <!-- Tombol Dropdown -->
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
@@ -82,6 +78,37 @@
                                 </form>
                             </li>
                         </ul>
+                    </li> --}}
+                    <!-- DESKTOP: Dropdown Profil -->
+                    <li class="nav-item dropdown d-none d-md-block">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
+                            <span class="text-white text-truncate" style="max-width: 150px;">{{ Auth::user()->name }}</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width: 180px;">
+                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">Profil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button class="dropdown-item text-dark d-flex align-items-center" type="submit">
+                                        <i class="me-2" data-feather="log-out"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- MOBILE: Langsung Profil & Logout -->
+                    <li class="d-md-none">
+                        <a href="{{ route('profile.show') }}" class="menu-link">Profil</a>
+                    </li>
+                    <li class="d-md-none">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="menu-link logout-btn">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </nav>
