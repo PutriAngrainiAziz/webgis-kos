@@ -18,7 +18,7 @@ class PenggunaMainController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $user->favoritKos()->syncWithoutDetaching([$id]);
-        return redirect('/user/favorit')->with('success', 'Kos dihapus dari favorit.');
+        return redirect('/user/favorit')->with('success', 'Kos ditambahkan ke favorit.');
     }
 
     public function hapusFavorit($id)
@@ -32,7 +32,7 @@ class PenggunaMainController extends Controller
     public function daftarFavorit()
     {
         $user = auth()->user();
-        $kosFavorit = $user->favoritKos; // relasi many-to-many
+        $kosFavorit = $user->favoritKos;
         return view('pengguna.favorit', compact('kosFavorit'));
     }
 

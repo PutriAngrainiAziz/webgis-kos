@@ -4,8 +4,6 @@
     Dashboard Pemilik Kos
 @endsection
 
-
-
 @section('pemilik_layout')
 <div class="container-fluid">
     <div class="container py-3">
