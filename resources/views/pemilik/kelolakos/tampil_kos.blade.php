@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <!-- Table Responsive -->
+    <!-- Table  -->
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
             <thead class="table-dark">

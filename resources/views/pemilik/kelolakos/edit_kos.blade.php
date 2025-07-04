@@ -97,12 +97,6 @@
 </div>
 @endsection
 
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
-
 @push('javascript')
 <script>
     const map = L.map('map').setView([{{ old('latitude', $kos->latitude) ?? -4.01 }}, {{ old('longitude', $kos->longitude) ?? 122.52 }}], 13);

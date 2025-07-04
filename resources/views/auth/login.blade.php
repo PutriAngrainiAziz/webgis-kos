@@ -1,11 +1,10 @@
 <x-guest-layout>
     <head>
-        <title>Login Stylish</title>
+        <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Fonts & Icon -->
         <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900" rel="stylesheet">
-
 
         <!-- SweetAlert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

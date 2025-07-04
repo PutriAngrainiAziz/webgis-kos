@@ -24,9 +24,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-
-
-
     <!-- Main CSS File -->
     <link href="{{ asset('home_asset/css/main.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('home_asset/css/detailkos.css') }}">
@@ -41,7 +38,6 @@
     fixed-top d-flex align-items-center">
 
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-
             <a href="{{ url('/user/dashboard') }}#dashboard" class="logo d-flex align-items-center">
                 <h1 class="sitename m-0">KOS^_^</h1>
             </a>
@@ -100,7 +96,7 @@
                         </ul>
                     </li>
 
-                    <!-- MOBILE: Langsung Profil & Logout -->
+                    <!-- MOBILE -->
                     <li class="d-md-none">
                         <a href="{{ route('profile.show') }}" class="menu-link">Profil</a>
                     </li>
@@ -114,7 +110,6 @@
             </nav>
         </div>
     </header>
-
 
     <main class="main">
         @yield('content')
@@ -184,59 +179,59 @@
     <script src="{{ asset('home_asset/js/main.js') }}"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggle = document.querySelector('.mobile-nav-toggle');
-        const navMenu = document.getElementById('navmenu');
-        const closeBtn = document.querySelector('.close-btn');
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggle = document.querySelector('.mobile-nav-toggle');
+            const navMenu = document.getElementById('navmenu');
+            const closeBtn = document.querySelector('.close-btn');
 
-        toggle.addEventListener('click', function () {
-            navMenu.classList.toggle('active');
-        });
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function () {
-                navMenu.classList.remove('active');
+            toggle.addEventListener('click', function () {
+                navMenu.classList.toggle('active');
             });
-        }
 
-        // Opsional: klik di luar menu akan menutupnya
-        document.addEventListener('click', function (e) {
-            if (!navMenu.contains(e.target) && !toggle.contains(e.target)) {
-                navMenu.classList.remove('active');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function () {
+                    navMenu.classList.remove('active');
+                });
             }
-        });
-    });
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-@if(session('success'))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: @json(session('success')),
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
+            // klik di luar menu akan menutupnya
+            document.addEventListener('click', function (e) {
+                if (!navMenu.contains(e.target) && !toggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
         });
-    });
-</script>
-@endif
+    </script>
 
-@if(session('error'))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: @json(session('error')),
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'Tutup'
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: @json(session('success')),
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
         });
-    });
-</script>
-@endif
+    </script>
+    @endif
+
+    @if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: @json(session('error')),
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Tutup'
+            });
+        });
+    </script>
+    @endif
     @stack('javascript')
 </body>
 

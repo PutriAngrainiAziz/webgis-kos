@@ -6,9 +6,8 @@
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900" rel="stylesheet">
   <link href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" rel="stylesheet">
-
-  <!-- Style Khusus untuk Halaman Register -->
-    <link href="{{ asset('home_asset/css/register_pemilik.css') }}" rel="stylesheet">
+  
+  <link href="{{ asset('home_asset/css/register_pemilik.css') }}" rel="stylesheet">
 </head>
 
 <body>
