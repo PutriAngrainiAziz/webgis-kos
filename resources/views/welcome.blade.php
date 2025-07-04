@@ -8,7 +8,7 @@ Home Page
 @endphp
 @section('home_layout')
 <!-- Hero Section -->
-<section id="hero" class="hero dark-background">
+<section id="home" class="hero dark-background">
 
     <video class="hero-bg position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline>
         <source src="home_asset/video/Kendari.mp4" type="video/mp4">

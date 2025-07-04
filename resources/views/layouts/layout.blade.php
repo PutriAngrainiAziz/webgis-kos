@@ -41,7 +41,7 @@
         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
             <!-- Logo tetap terlihat di semua ukuran layar -->
-            <a href="{{ url('/') }}#hero" class="logo d-flex align-items-center">
+            <a href="{{ url('/') }}#home" class="logo d-flex align-items-center">
                 <h1 class="sitename m-0">KOS^_^</h1>
             </a>
 
@@ -52,7 +52,7 @@
             <!-- Menu navigasi -->
             <nav id="navmenu" class="navmenu">
                 <ul class="nav-links list-unstyled mb-2">
-                    <li><a href="{{ url('/') }}#hero">Home</a></li>
+                    <li><a href="{{ url('/') }}#home">Home</a></li>
                     <li><a href="{{ url('/') }}#peta">Peta</a></li>
                     <li><a href="{{ url('/') }}#kos">Kos</a></li>
 

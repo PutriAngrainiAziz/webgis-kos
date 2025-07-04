@@ -994,7 +994,52 @@ section,
 
 
 
-// daftar kos di welcome
+// dstyle favorit
+.favorit-form {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+}
+
+.favorit-icon {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.favorit-icon:hover {
+    background-color: rgba(255, 240, 240, 1);
+    transform: scale(1.08);
+}
+
+.favorit-icon i {
+    font-size: 1rem;
+    color: #dc3545;
+}
+
+//pengguna profile
+.dropdown-menu {
+    background-color: #fff;
+    color: #000;
+    border-radius: 10px;
+    min-width: 180px;
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 15px;
+}
 
 
 

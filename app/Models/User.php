@@ -20,7 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',             
+        'role',
         'nik',
         'alamat',
         'foto_ktp',
@@ -49,4 +49,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function favoritKos()
+    {
+        return $this->belongsToMany(\App\Models\Kos::class, 'favorites')->withTimestamps();
+    }
+
+
+
+
 }

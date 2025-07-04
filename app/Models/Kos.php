@@ -24,4 +24,11 @@ class Kos extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function favoritOleh()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'favorites')->withTimestamps();
+    }
+
+
 }

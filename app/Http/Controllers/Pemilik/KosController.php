@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class KosController extends Controller
 {
     /**
-     * Tampilan Utama
+     * Tampilan Utama welcome
      */
     public function petaKos()
     {
@@ -19,6 +19,17 @@ class KosController extends Controller
                         ->where('status_verifikasi', 'disetujui')
                         ->get();
         return view('welcome', compact('kosList'));
+    }
+
+    /**
+     * Tampilan Utama Dashboard user
+     */
+    public function petaKosUser()
+    {
+        $kosList = Kos::where('status', 'aktif')
+                        ->where('status_verifikasi', 'disetujui')
+                        ->get();
+        return view('pengguna.dashboard', compact('kosList'));
     }
 
     /**
@@ -215,6 +226,15 @@ class KosController extends Controller
     {
         $kos = Kos::findOrFail($id); // pastikan model Kos sudah di-import
         return view('detail_kos', compact('kos'));
+    }
+
+    /**
+     * Detail Kos user selengkapnya
+     */
+    public function detailKosUser($id)
+    {
+        $kos = Kos::findOrFail($id);
+        return view('pengguna.detail_kos', compact('kos'));
     }
 
     public function verifikasiKos()

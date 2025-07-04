@@ -23,8 +23,14 @@ Route::get('/detailkos/{id}', [KosController::class, 'detailKos']);
 Route::middleware(['auth', 'verified', 'rolemanager:pengguna'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/dashboard', [PenggunaMainController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [KosController::class, 'petaKosUser'])->name('dashboard');
+        Route::get('/detailkos/{id}', [KosController::class, 'detailKosUser']);
+        Route::get('/favorit', [PenggunaMainController::class, 'daftarFavorit'])->name('favorit.index');
+        Route::post('/kos/{id}/favorit', [PenggunaMainController::class, 'tambahFavorit'])->name('kos.favorit');
+        Route::post('/kos/{id}/unfavorit', [PenggunaMainController::class, 'hapusFavorit'])->name('kos.unfavorit');
 
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.user');
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit.user');
     });
 });
 
@@ -61,7 +67,6 @@ Route::middleware(['auth', 'verified', 'rolemanager:admin'])->group(function () 
 
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit.admin');
-
     });
 });
 
