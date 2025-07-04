@@ -1,11 +1,11 @@
 @extends('pemilik.layouts.layout')
 @section('pemilik_page_title')
-    Profile Pemilik
+    Edit Profile Pemilik
 @endsection
 
 @section('content')
 <div class="container mt-4">
-    <h3>Profil {{ ucfirst($roleName) }}</h3>
+    <h3>Edit Profil {{ ucfirst($roleName) }}</h3>
     <form method="POST" action="{{ route('profile.update') }}">
         @csrf
         @method('PATCH')

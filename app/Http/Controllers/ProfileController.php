@@ -20,6 +20,16 @@ class ProfileController extends Controller
         return view('pengguna.profile.profile');
     }
 
+    public function showAdmin()
+    {
+        return view('admin.profile.profile');
+    }
+
+    public function showPemilik()
+    {
+        return view('pemilik.profile.profile');
+    }
+
     public function edit()
     {
         $user = Auth::user();
@@ -68,14 +78,13 @@ class ProfileController extends Controller
 
         // Arahkan ke route edit sesuai role
         $redirectRoute = match ((int)$user->role) {
-            0 => 'profile.edit.admin',
-            1 => 'profile.edit.pemilik',
-            2 => 'profile.edit.user',
+            0 => 'profile.showAdmin',
+            1 => 'profile.showPemilik',
+            2 => 'profile.show',
             default => 'home',
         };
 
-        // return Redirect::route($redirectRoute)->with('success', 'Profil berhasil diperbarui');
-        return redirect()->route('profile.show')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->route($redirectRoute)->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**

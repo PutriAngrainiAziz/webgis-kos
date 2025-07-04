@@ -1,11 +1,11 @@
 @extends('admin.layouts.layout')
 @section('admin_page_title')
-    Admin Profile
+    Edit Profile
 @endsection
 
 @section('content')
 <div class="container mt-4">
-    <h3>Profil {{ ucfirst($roleName) }}</h3>
+    <h3>Edit Profil {{ ucfirst($roleName) }}</h3>
 
     @if (session('status') === 'profile-updated')
         <div class="alert alert-success">Profil berhasil diperbarui.</div>

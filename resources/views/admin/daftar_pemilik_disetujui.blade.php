@@ -25,7 +25,7 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                {{-- <tbody>
                     @foreach($pemiliks as $index => $pemilik)
                         <tr>
                             <td>{{ $index + 1 }}</td>
@@ -53,6 +53,42 @@
                             </td>
                         </tr>
                     @endforeach
+                </tbody> --}}
+                <tbody>
+                    @if($pemiliks->isEmpty())
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                <p class="mb-0">Belum ada data pemilik kos terverifikasi.</p>
+                            </td>
+                        </tr>
+                    @else
+                        @foreach($pemiliks as $index => $pemilik)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $pemilik->name }}</td>
+                                <td>{{ $pemilik->email }}</td>
+                                <td>{{ $pemilik->nik }}</td>
+                                <td>{{ $pemilik->alamat }}</td>
+                                <td>
+                                    @if($pemilik->foto_ktp)
+                                        <img src="{{ asset('storage/ktp/' . $pemilik->foto_ktp) }}" width="100">
+                                    @else
+                                        Tidak ada
+                                    @endif
+                                </td>
+                                <td><span class="badge bg-success">{{ ucfirst($pemilik->status_verifikasi) }}</span></td>
+                                <td>
+                                    <form id="form-hapus-{{ $pemilik->id }}" action="{{ route('admin.pemilik.destroy', $pemilik->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="{{ $pemilik->id }}">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
