@@ -1,10 +1,17 @@
 @extends('pengguna.layouts.layout')
 
+@section('user_title')
+Kos Favorit
+@endsection
+
 @section('content')
 <div id="favorit" class="container py-4">
 
     @if ($kosFavorit->isEmpty())
-        <p class="text-muted">Belum ada kos favorit.</p>
+        <div class="kos-favorit-empty text-center py-5">
+            <img src="{{ asset('home_asset/penggunaasset/no_result.png') }}" alt="Kos Favorit Kosong" class="empty-fav-img mb-4 pt-5">
+            <h4 class="text-dark">Belum ada kos favorit</h4>
+        </div>
     @else
         <div class="d-flex overflow-auto gap-4 pb-3 favorit-container">
             @foreach ($kosFavorit as $kos)

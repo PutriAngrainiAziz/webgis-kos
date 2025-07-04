@@ -18,7 +18,7 @@ class PenggunaMainController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $user->favoritKos()->syncWithoutDetaching([$id]);
-        return back()->with('success', 'Kos ditambahkan ke favorit.');
+        return redirect('/user/favorit')->with('success', 'Kos dihapus dari favorit.');
     }
 
     public function hapusFavorit($id)
@@ -26,7 +26,7 @@ class PenggunaMainController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $user->favoritKos()->detach($id);
-        return back()->with('success', 'Kos dihapus dari favorit.');
+        return redirect('/user/favorit')->with('success', 'Kos dihapus dari favorit.');
     }
 
     public function daftarFavorit()
