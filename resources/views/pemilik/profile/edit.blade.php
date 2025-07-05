@@ -20,6 +20,11 @@
             <input name="email" type="email" class="form-control" value="{{ old('email', $user->email) }}" required>
         </div>
 
+        {{-- <div class="mb-3">
+            <label for="nik" class="form-label">NIK</label>
+            <input name="nik" type="text" class="form-control" value="{{ old('nik', $user->nik) }}" required>
+        </div> --}}
+
         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
     </form>
 

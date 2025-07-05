@@ -30,13 +30,6 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-sm-4 fw-bold">Nomor Telepon</div>
-                        <div class="col-sm-8">{{ Auth::user()->no_telp ?? '-' }}</div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-sm-4 fw-bold">Alamat</div>
-                        <div class="col-sm-8">{{ Auth::user()->alamat ?? '-' }}</div>
                     </div>
 
                     <div class="text-center">

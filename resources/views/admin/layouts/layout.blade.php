@@ -54,7 +54,7 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-item">
+                    <li class="sidebar-item {{ request()->routeIs('profile.showAdmin') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('profile.showAdmin') }}">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
                         </a>
