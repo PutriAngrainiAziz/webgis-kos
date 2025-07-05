@@ -70,11 +70,24 @@
                             <input type="file" class="form-control" name="foto" id="foto" accept="image/*">
                         </div>
 
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <label class="form-label">Pilih Lokasi Kos di Peta</label>
                             <div id="map" style="height: 250px; max-height: 50vh;" class="rounded shadow-sm mt-2"></div>
                             <input type="hidden" id="latitude" name="latitude" required>
                             <input type="hidden" id="longitude" name="longitude" required>
+                        </div> --}}
+                        <label class="form-label">Pilih Lokasi Kos di Peta</label>
+                        <div id="map" style="height: 250px;" class="rounded shadow-sm mt-2"></div>
+
+                        <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Latitude</label>
+                            <input type="text" class="form-control" id="latitude" name="latitude" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Longitude</label>
+                            <input type="text" class="form-control" id="longitude" name="longitude" required>
+                        </div>
                         </div>
 
                         <button type="submit" class="btn btn-save w-100">
@@ -110,4 +123,57 @@
         marker = L.marker([lat, lng]).addTo(map);
     });
 </script>
+
+<!-- Pastikan Leaflet sudah ter-load -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+<script>
+    let map = L.map('map').setView([-3.9828, 122.5189], 13); // Koordinat Kendari default
+    let marker;
+
+    // Tampilkan peta
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Leaflet &copy; OpenStreetMap',
+    }).addTo(map);
+
+    // Fungsi untuk set marker di peta
+    function setMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            marker.on('dragend', function (e) {
+                let pos = e.target.getLatLng();
+                document.getElementById('latitude').value = pos.lat;
+                document.getElementById('longitude').value = pos.lng;
+            });
+        }
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+    }
+
+    // Saat klik di peta
+    map.on('click', function (e) {
+        setMarker(e.latlng.lat, e.latlng.lng);
+    });
+
+    // Update marker saat isi input manual
+    document.getElementById('latitude').addEventListener('input', function () {
+        updateMarkerFromInput();
+    });
+    document.getElementById('longitude').addEventListener('input', function () {
+        updateMarkerFromInput();
+    });
+
+    function updateMarkerFromInput() {
+        let lat = parseFloat(document.getElementById('latitude').value);
+        let lng = parseFloat(document.getElementById('longitude').value);
+        if (!isNaN(lat) && !isNaN(lng)) {
+            setMarker(lat, lng);
+            map.setView([lat, lng], 15);
+        }
+    }
+</script>
+
 @endpush
