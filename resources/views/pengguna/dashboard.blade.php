@@ -265,13 +265,15 @@ Dashboard User
                 icon: customIcon,
                 pane: 'paneKos'
             }).bindPopup(`
-                <div style="width: 250px; min-height: 280px;">
+                <div style="width: 250px; min-height: 280px;"> <!-- min-height boleh -->
                     <a href="/detailkos/${kos.id}" style="text-decoration: none; color: inherit;">
-                        <img src="/storage/foto_kos/${kos.foto}" style="width: 100%; height: 140px; object-fit: cover; border-radius: 8px;">
-                        <strong>${kos.nama_kos}</strong><br>
-                        Harga: Rp ${parseInt(kos.harga_sewa).toLocaleString()}<br>
-                        Tipe: ${kos.tipe_kamar}<br>
-                        Fasilitas: ${kos.fasilitas}<br>
+                        <img src="/storage/foto_kos/${kos.foto}" style="width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+
+                        <strong>${kos.nama_kos.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}</strong><br>
+                        <strong>Alamat:</strong> ${kos.alamat}<br>
+                        <strong> Harga:</strong> Rp ${parseInt(kos.harga_sewa).toLocaleString()}<br>
+                        <strong>Tipe:</strong> ${kos.tipe_kamar}<br>
+                        <strong>Fasilitas:</strong> ${kos.fasilitas}<br>
                     </a>
                 </div>
             `);
