@@ -65,10 +65,18 @@
                             </select>
                         </div>
 
+                        {{-- <div class="col-md-6">
+                            <label for="foto" class="form-label">Foto Kos</label>
+                            <input type="file" class="form-control" name="foto" id="foto" accept="image/*">
+                        </div> --}}
                         <div class="col-md-6">
                             <label for="foto" class="form-label">Foto Kos</label>
                             <input type="file" class="form-control" name="foto" id="foto" accept="image/*">
+                            @if ($errors->has('foto'))
+                                <small class="text-danger">{{ $errors->first('foto') }}</small>
+                            @endif
                         </div>
+
 
                         {{-- <div class="col-12">
                             <label class="form-label">Pilih Lokasi Kos di Peta</label>
